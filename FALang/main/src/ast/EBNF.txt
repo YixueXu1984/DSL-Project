@@ -1,0 +1,26 @@
+Program 	= FA “(“ NAME “)” “{“ ALPHABET “}” “{“ NODE “}”
+FA 		= “DFA” | “NFA”
+ALPHABET 	= CHAR? [“,” CHAR]*
+NODE 		= [“start”|LABEL|ANONLABEL] “->” ARCS
+		| “terminal” “:” LABEL “->” ARCS
+ARCS		= “{“ ARC? [“,” ARC]* “}”
+ARC		= LABEL “(“ CHARE+ “)”
+ANONLABEL	= “_” LABEL
+LABEL		= CHAR [CHAR|_]*
+CHARE		= CHAR|/e
+CHAR		= a-z|A-Z|0-9
+
+Vars-> labels / alphabet
+Type checking->full transition function, DFA vs. NFA restrictions.
+
+Example NFA for binary strings with even count of 0s or 1s
+
+NFA(myNFA){
+	0, 1
+}{
+	start 		-> { zeroE(/e), oneE(/e) }
+	terminal:_zeroE	-> { zeroE(1), zero(0) }
+	terminal:_oneE	-> { oneE(0), one(1) }
+	_zero:		-> { zero(1), zeroE(0) }
+	_one:		-> { one(0), oneE(1) }
+}
