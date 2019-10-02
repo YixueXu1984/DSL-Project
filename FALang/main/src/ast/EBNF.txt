@@ -1,11 +1,12 @@
 Program 	= FA “(“ NAME “)” “{“ ALPHABET “}” “{“ NODE “}”
-FA 		= “DFA” | “NFA”
+FA 		    = “DFA” | “NFA”
 ALPHABET 	= CHAR? [“,” CHAR]*
 NODE 		= [“start”|LABEL|ANONLABEL] “->” ARCS
-		| “terminal” “:” LABEL “->” ARCS
+	    	| “terminal” “:” LABEL “->” ARCS
 ARCS		= “{“ ARC? [“,” ARC]* “}”
-ARC		= LABEL “(“ CHARE+ “)”
+ARC		    = LABEL “(“ CHARE+ “)”
 ANONLABEL	= “_” LABEL
+NAME        = LABEL
 LABEL		= CHAR [CHAR|_]*
 CHARE		= CHAR|/e
 CHAR		= a-z|A-Z|0-9
