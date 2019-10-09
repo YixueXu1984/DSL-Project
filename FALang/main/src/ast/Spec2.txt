@@ -1,0 +1,26 @@
+Program     : FA
+FA          : "DFA"|"NFA" + "(" + NAME + ")" + "{" + ALPHABET + "}" + "{" + STATES + "}"
+STATES      := NODE + ("," + NODE)*
+NODE        := LABEL
+            |  LABEL + "->" + "{" + ARCS + "}"
+            |  LABEL + "(" + "start" + ")" + "->" + "{" + ARCS + "}"
+            |  LABEL + "(" + "accepting" + ")" + "->" + "{" + ARCS + "}"
+ARCS        := (ARC + ("," + ARC)*)?
+ARC         := LABEL "(" + CHARE + ")"
+LABEL       := [a-zA-Z0-9]+
+CHARE       := [a-zA-Z0-9]|"\e"
+
+Notes: \e denotes an epsilon character
+       Labels will be truncated at 5 characters in output
+
+Example Program:
+
+NFA that accepts binary string with at least 2 zeroes.
+
+NFA(myNFA) {
+    0, 1
+} {
+    q0(start)       -> {q0(\e), q0(1), q1(0)}
+    q1              -> {q1(1), q2(0)}
+    q2(accepting)   -> {q2(1), q2(0)}
+}
