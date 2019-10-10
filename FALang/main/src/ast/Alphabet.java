@@ -15,7 +15,7 @@ public class Alphabet extends AST  {
         a = new HashMap<>();
     }
 
-    public AST accept(Visitor<AST> v) {
+    public <T> T accept(Visitor<T> v) {
         return v.visit(this);
     }
 }

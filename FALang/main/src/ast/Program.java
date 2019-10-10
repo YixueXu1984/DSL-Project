@@ -6,7 +6,7 @@ public class Program extends AST {
 
     public FA finiteAutomata;
 
-    public AST accept(Visitor<AST> v) {
+    public <T> T accept(Visitor<T> v) {
         return v.visit(this);
     }
 

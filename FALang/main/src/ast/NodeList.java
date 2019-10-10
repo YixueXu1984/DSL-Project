@@ -13,7 +13,7 @@ public class NodeList extends AST {
         nodes = new HashSet<>();
     }
 
-    public AST accept(Visitor<AST> v) {
+    public <T> T accept(Visitor<T> v) {
         return v.visit(this);
     }
 }

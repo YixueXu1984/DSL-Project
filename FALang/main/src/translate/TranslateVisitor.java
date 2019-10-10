@@ -3,43 +3,52 @@ package translate;
 import ast.*;
 import general.Visitor;
 
-public class TranslateVisitor<AST> implements Visitor<AST> {
+public class TranslateVisitor implements Visitor<String> {
+
+    private String concat(String ... strs) {
+        String output = "";
+        for(String str: strs)
+            output += str + " \n";
+        return output;
+    }
 
     @Override
-    public AST visit(AST ast) { return null; }
+    public String visit(AST ast) { return null; }
 
     @Override
-    public AST visit(Alphabet a) {
+    public String visit(Alphabet a) {
         return null;
     }
 
     @Override
-    public AST visit(Arc a) {
+    public String visit(Arc a) {
         return null;
     }
 
     @Override
-    public AST visit(FA fa) {
+    public String visit(FA fa) {
         return null;
     }
 
     @Override
-    public AST visit(Node n) {
+    public String visit(Node n) {
         return null;
     }
 
     @Override
-    public AST visit(NodeList nl) {
+    public String visit(NodeList nl) {
         return null;
     }
 
     @Override
-    public AST visit(Program p) {
-        return null;
+    public String visit(Program p) {
+        String imports = "";
+        String init = "";
+        return concat(imports, init, p.finiteAutomata.accept(this));
     }
 
     @Override
-    public AST visit(ArcList al) {
+    public String visit(ArcList al) {
         return null;
     }
 }

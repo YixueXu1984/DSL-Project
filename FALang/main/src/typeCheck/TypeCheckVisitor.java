@@ -6,7 +6,7 @@ import general.Visitor;
 import java.util.BitSet;
 import java.util.Set;
 
-public class TypeCheckVisitor<AST> implements Visitor<AST> {
+public class TypeCheckVisitor implements Visitor<AST> {
 
     private Set<String> states;
     private boolean isDFA;

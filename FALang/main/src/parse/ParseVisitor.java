@@ -6,7 +6,7 @@ import general.Visitor;
 import java.util.Iterator;
 import java.util.List;
 
-public class ParseVisitor<AST> implements Visitor<AST> {
+public class ParseVisitor implements Visitor<AST> {
 
     private Iterator<String> tokens;
 

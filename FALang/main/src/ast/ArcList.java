@@ -13,7 +13,7 @@ public class ArcList extends AST {
         arcs = new HashSet<>();
     }
 
-    public AST accept(Visitor<AST> v) {
+    public <T> T accept(Visitor<T> v) {
         return v.visit(this);
     }
 }

@@ -2,20 +2,20 @@ package general;
 
 import ast.*;
 
-public interface Visitor<AST> {
-    AST visit(AST ast);
+public interface Visitor<T> {
+    T visit(AST ast);
 
-    AST visit(Alphabet a);
+    T visit(Alphabet a);
 
-    AST visit(Arc a);
+    T visit(Arc a);
 
-    AST visit(FA fa);
+    T visit(FA fa);
 
-    AST visit(Node n);
+    T visit(Node n);
 
-    AST visit(NodeList nl);
+    T visit(NodeList nl);
 
-    AST visit(Program p);
+    T visit(Program p);
 
-    AST visit(ArcList al);
+    T visit(ArcList al);
 }

@@ -7,7 +7,7 @@ public class Arc extends AST {
     public String fromNode;
     public String toNode;
 
-    public AST accept(Visitor<AST> v) {
+    public <T> T accept(Visitor<T> v) {
         return v.visit(this);
     }
 }
