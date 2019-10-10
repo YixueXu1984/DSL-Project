@@ -1,26 +1,101 @@
 package tokenize;
 
+import parse.ParseError;
+
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 
 public class Tokenizer {
 
-    //Basic EBNF modifications should only require changing these two static fields
-    public static String[] delimitors = {"{", "}", "(", ")", ",", ":"};
-    public static String skips = " \n\r";
+    private static String program;
+    private static List<String> literals;
+    private String[] tokens;
+    private int currentToken = 0;
+    private static Tokenizer theTokenizer;
 
-    //helper
-    private static String wrapAll(String s) {
-        for(String d: delimitors) {
-            s = s.replace(d, " " + d + " ");
+
+    private Tokenizer(String filename, List<String> literalsList){
+        literals = literalsList;
+        try {
+            program = new String(Files.readAllBytes(Paths.get(filename)), StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            System.out.println("Didn't find file" + e.getLocalizedMessage());
+            System.exit(0);
+        }
+        tokenize();
+    }
+
+    private void  tokenize() {
+
+        String tokenizedProgram = program;
+        tokenizedProgram = tokenizedProgram.replace("\n","");
+        System.out.println(program);
+
+        for (String s : literals){
+            tokenizedProgram = tokenizedProgram.replace(s,"_"+s+"_");
+            System.out.println(tokenizedProgram);
+        }
+
+        tokenizedProgram = tokenizedProgram.replaceAll("[ ]+","");
+        System.out.println(tokenizedProgram);
+        tokens= tokenizedProgram.split("[_]+");
+
+        System.out.println(Arrays.asList(tokens));
+    }
+
+
+    public static void makeTokenizer(String filename, List<String> literals){
+        if (theTokenizer==null){
+            theTokenizer = new Tokenizer(filename,literals);
+        }
+    }
+
+    private String checkNext(){
+        String token="";
+        if (currentToken<tokens.length){
+            token = tokens[currentToken];
+        }
+        else {
+            throw new ParseError("Expected Additional Tokens");
+        }
+        return token;
+    }
+
+    public String getNext(){
+        String token="";
+        if (currentToken<tokens.length){
+            token = tokens[currentToken];
+            currentToken++;
+        }
+        else {
+            throw new ParseError("Expected Additional Tokens");
+        }
+
+        return token;
+    }
+
+    public String getAndCheckNext(String regexp){
+        String s = getNext();
+        if (!s.matches(regexp)) {
+            throw new ParseError("Expected "+ regexp + " but got " + s + " when parsing ");
         }
         return s;
     }
 
-    public static List<String> tokenize(String program) {
-        StringTokenizer st = new StringTokenizer(program, skips);
-        List<String> tokens = new ArrayList<>();
-        while(st.hasMoreTokens())
-            tokens.addAll(Arrays.asList(Tokenizer.wrapAll(st.nextToken()).split(" ")));
-        return tokens;
+    public boolean checkToken(String regexp){
+        String s = checkNext();
+        return (s.matches(regexp));
+    }
+
+    public boolean moreTokens(){
+        return currentToken<tokens.length;
+    }
+
+
+    public static Tokenizer getTokenizer(){
+        return theTokenizer;
     }
 }

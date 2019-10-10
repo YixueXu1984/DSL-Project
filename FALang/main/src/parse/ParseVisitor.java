@@ -2,31 +2,11 @@ package parse;
 
 import ast.*;
 import general.Visitor;
-
-import java.util.Iterator;
-import java.util.List;
+import tokenize.Tokenizer;
 
 public class ParseVisitor<AST> implements Visitor<AST> {
 
-    private Iterator<String> tokens;
-
-    private boolean getAndCheckNext(String s) {
-        if(tokens.hasNext())
-            return tokens.next().equals(s);
-        else
-            throw new ParseError("Expected Additional Tokens");
-    }
-
-    private String getNext() {
-        if(tokens.hasNext())
-            return tokens.next();
-        else
-            throw new ParseError("Expected Additional Tokens");
-    }
-
-    public ParseVisitor(List<String>tokens) {
-        this.tokens = tokens.iterator();
-    }
+    protected Tokenizer tokenizer = Tokenizer.getTokenizer();
 
     @Override
     public AST visit(AST ast) {
@@ -45,7 +25,7 @@ public class ParseVisitor<AST> implements Visitor<AST> {
 
     @Override
     public AST visit(FA fa) {
-        switch (getNext()) {
+        switch (tokenizer.getNext()) {
             case "DFA":
                 fa.isDFA = true;
                 break;
@@ -55,15 +35,15 @@ public class ParseVisitor<AST> implements Visitor<AST> {
             default:
                 throw new ParseError("Expected either 'NFA' or 'DFA'");
         }
-        getAndCheckNext("(");
-        fa.name = getNext();
-        getAndCheckNext(")");
-        getAndCheckNext("{");
+        tokenizer.getAndCheckNext("(");
+        fa.name = tokenizer.getNext();
+        tokenizer.getAndCheckNext(")");
+        tokenizer.getAndCheckNext("{");
         fa.a = (Alphabet) this.visit(new Alphabet());
-        getAndCheckNext("}");
-        getAndCheckNext("{");
+        tokenizer.getAndCheckNext("}");
+        tokenizer.getAndCheckNext("{");
         fa.nodes = (NodeList) this.visit(new NodeList());
-        getAndCheckNext("}");
+        tokenizer.getAndCheckNext("}");
         return (AST) fa;
     }
 
