@@ -14,6 +14,7 @@ public class Parser {
     public static Set<String> punctuation = new HashSet<>(Arrays.asList(Tokenizer.delimitors));
 
     public Program parse(List<String> tokens) {
+
         return (Program) (new ParseVisitor<AST>(tokens)).visit(new Program());
     }
 }
