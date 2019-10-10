@@ -29,6 +29,11 @@ public class TranslateVisitor<AST> implements Visitor<AST> {
     }
 
     @Override
+    public AST visit(NodeList nl) {
+        return null;
+    }
+
+    @Override
     public AST visit(Program p) {
         return null;
     }

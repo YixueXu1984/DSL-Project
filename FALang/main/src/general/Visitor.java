@@ -13,5 +13,7 @@ public interface Visitor<AST> {
 
     AST visit(Node n);
 
+    AST visit(NodeList nl);
+
     AST visit(Program p);
 }
