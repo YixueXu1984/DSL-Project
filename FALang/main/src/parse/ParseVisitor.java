@@ -82,4 +82,9 @@ public class ParseVisitor<AST> implements Visitor<AST> {
         p.finiteAutomata = (FA) this.visit(new FA());
         return (AST) p;
     }
+
+    @Override
+    public AST visit(ArcList al) {
+        return null;
+    }
 }

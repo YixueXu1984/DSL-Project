@@ -37,4 +37,9 @@ public class TranslateVisitor<AST> implements Visitor<AST> {
     public AST visit(Program p) {
         return null;
     }
+
+    @Override
+    public AST visit(ArcList al) {
+        return null;
+    }
 }

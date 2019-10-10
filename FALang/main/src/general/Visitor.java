@@ -16,4 +16,6 @@ public interface Visitor<AST> {
     AST visit(NodeList nl);
 
     AST visit(Program p);
+
+    AST visit(ArcList al);
 }

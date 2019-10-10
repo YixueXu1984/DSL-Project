@@ -2,17 +2,15 @@ package ast;
 
 import general.Visitor;
 
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
-public class Alphabet extends AST  {
+public class ArcList extends AST {
 
-    public Map<String, ArcList> a;
+    public Set<Arc> arcs;
 
-    public Alphabet() {
-        a = new HashMap<>();
+    public ArcList() {
+        arcs = new HashSet<>();
     }
 
     public AST accept(Visitor<AST> v) {
