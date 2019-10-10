@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 
 public class Parser {
 
-    public static Set<String> reservedWords = Stream.of("FA", "NFA", "start", "terminal").
+    public static Set<String> reservedWords = Stream.of("FA", "NFA", "start", "accepting").
             collect(Collectors.toCollection(HashSet::new));
     public static Set<String> punctuation = new HashSet<>(Arrays.asList(Tokenizer.delimitors));
 

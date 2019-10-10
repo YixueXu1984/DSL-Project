@@ -5,7 +5,7 @@ import java.util.*;
 public class Tokenizer {
 
     //Basic EBNF modifications should only require changing these two static fields
-    public static String[] delimitors = {"{", "}", "(", ")", ",", ":", "->"};
+    public static String[] delimitors = {"{", "}", "(", ")", ",", ":"};
     public static String skips = " \n\r";
 
     //helper
