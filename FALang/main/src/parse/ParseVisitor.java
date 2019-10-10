@@ -4,7 +4,7 @@ import ast.*;
 import general.Visitor;
 import tokenize.Tokenizer;
 
-public class ParseVisitor<AST> implements Visitor<AST> {
+public class ParseVisitor implements Visitor<AST> {
 
     protected Tokenizer tokenizer = Tokenizer.getTokenizer();
 
@@ -61,5 +61,10 @@ public class ParseVisitor<AST> implements Visitor<AST> {
     public AST visit(Program p) {
         p.finiteAutomata = (FA) this.visit(new FA());
         return (AST) p;
+    }
+
+    @Override
+    public AST visit(ArcList al) {
+        return null;
     }
 }

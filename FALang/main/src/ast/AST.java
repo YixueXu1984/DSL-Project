@@ -5,5 +5,5 @@ import tokenize.Tokenizer;
 
 public abstract class AST {
 
-    public abstract AST accept(Visitor<AST> v);
+    public abstract <T> T accept(Visitor<T> v);
 }

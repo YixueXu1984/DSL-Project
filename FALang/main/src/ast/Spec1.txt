@@ -3,7 +3,6 @@ FA          := "DFA"|"NFA" + "(" + NAME + ")" + "{" + ALPHABET + "}" + "{" + STA
 ALPHABET    := (CHARE + ("," + CHARE)*)?
 STATES      := NODE + ("," + NODE)*
 NODE        := LABEL
-            |  LABEL
             |  LABEL + "(" + "start" + ")"
             |  LABEL + "(" + "accepting" + ")"
 ARCS        := (ARC + ("," + ARC)*)?
