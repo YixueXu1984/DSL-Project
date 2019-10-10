@@ -19,11 +19,6 @@ public class TranslateVisitor<AST> implements Visitor<AST> {
     }
 
     @Override
-    public AST visit(Char c) {
-        return null;
-    }
-
-    @Override
     public AST visit(FA fa) {
         return null;
     }

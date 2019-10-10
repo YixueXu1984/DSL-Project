@@ -18,11 +18,6 @@ public class TypeCheckVisitor<AST> implements Visitor<AST> {
     public AST visit(Arc a) { return null; }
 
     @Override
-    public AST visit(Char c) {
-        return null;
-    }
-
-    @Override
     public AST visit(FA fa) {
         return null;
     }

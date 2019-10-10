@@ -9,8 +9,6 @@ public interface Visitor<AST> {
 
     AST visit(Arc a);
 
-    AST visit(Char c);
-
     AST visit(FA fa);
 
     AST visit(Node n);
