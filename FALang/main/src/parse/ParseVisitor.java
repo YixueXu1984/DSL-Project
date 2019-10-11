@@ -35,32 +35,41 @@ public class ParseVisitor implements Visitor<AST> {
             default:
                 throw new ParseError("Expected either 'NFA' or 'DFA'");
         }
-        tokenizer.getAndCheckNext("(");
+        tokenizer.getAndCheckNext("\\(");
         fa.name = tokenizer.getNext();
-        tokenizer.getAndCheckNext(")");
-        tokenizer.getAndCheckNext("{");
-        fa.a = (Alphabet) this.visit(new Alphabet());
-        tokenizer.getAndCheckNext("}");
-        tokenizer.getAndCheckNext("{");
+        tokenizer.getAndCheckNext("\\)");
+        tokenizer.getAndCheckNext("\\{");
         fa.nodes = (NodeList) this.visit(new NodeList());
-        tokenizer.getAndCheckNext("}");
-        return (AST) fa;
+        tokenizer.getAndCheckNext("\\}");
+        tokenizer.getAndCheckNext("\\{");
+        fa.a = (Alphabet) this.visit(new Alphabet());
+        tokenizer.getAndCheckNext("\\}");
+        return fa;
     }
 
     @Override
     public AST visit(Node n) {
+        String label = tokenizer.getNext();
+        if(tokenizer.checkToken("\\,")){
+            tokenizer.getNext();
+        }
+        n.label=label;
         return null;
     }
 
     @Override
     public AST visit(NodeList nl) {
+        while(!tokenizer.checkToken("\\}")) {
+            Node node = (Node) this.visit(new Node());
+            nl.nodes.add(node);
+        }
         return null;
     }
 
     @Override
     public AST visit(Program p) {
         p.finiteAutomata = (FA) this.visit(new FA());
-        return (AST) p;
+        return p;
     }
 
     @Override

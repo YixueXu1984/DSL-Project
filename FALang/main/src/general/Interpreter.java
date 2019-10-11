@@ -1,5 +1,7 @@
 package general;
 
+import ast.Program;
+import parse.Parser;
 import tokenize.Tokenizer;
 
 import java.util.Arrays;
@@ -15,6 +17,7 @@ public class Interpreter {
 
         List<String> literals = Arrays.asList( "{", "}", "(", ")", ",", ":");
         Tokenizer.makeTokenizer("input.txt", literals);
+        Parser.parse();
 
     }
 }

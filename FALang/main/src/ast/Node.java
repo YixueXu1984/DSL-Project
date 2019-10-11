@@ -5,7 +5,7 @@ import general.Visitor;
 import java.util.Map;
 import java.util.Set;
 
-public class Node {
+public class Node extends AST{
 
     public String label;
 
