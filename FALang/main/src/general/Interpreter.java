@@ -17,7 +17,6 @@ public class Interpreter {
 
         List<String> literals = Arrays.asList( "{", "}", "(", ")", ",", ":");
         Tokenizer.makeTokenizer("input.txt", literals);
-        Parser.parse();
-
+        Program program = Parser.parse();
     }
 }

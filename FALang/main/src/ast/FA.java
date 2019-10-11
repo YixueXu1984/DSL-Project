@@ -8,7 +8,7 @@ public class FA extends AST  {
 
     public boolean isDFA;
     public String name;
-    public Alphabet a;
+    public Alphabet alphabet;
     public NodeList nodes;
 
     public <T> T accept(Visitor<T> v) {

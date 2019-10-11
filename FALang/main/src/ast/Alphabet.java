@@ -9,10 +9,10 @@ import java.util.Set;
 
 public class Alphabet extends AST  {
 
-    public Map<String, ArcList> a;
+    public Map<String, ArcList> alphabetToArcs;
 
     public Alphabet() {
-        a = new HashMap<>();
+        alphabetToArcs = new HashMap<>();
     }
 
     public <T> T accept(Visitor<T> v) {

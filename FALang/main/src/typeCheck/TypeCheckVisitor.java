@@ -18,10 +18,10 @@ public class TypeCheckVisitor implements Visitor<AST> {
 
     @Override
     public AST visit(Alphabet a) {
-        for(String charE: a.a.keySet()) {
+        for(String charE: a.alphabetToArcs.keySet()) {
             //check valid alphabet character
         }
-        for(ArcList al: a.a.values()) {
+        for(ArcList al: a.alphabetToArcs.values()) {
             //check all states have an outgoing edge for each charE (exactly one in case of DFA)
         }
         return (AST) a;

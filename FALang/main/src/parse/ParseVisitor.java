@@ -15,12 +15,22 @@ public class ParseVisitor implements Visitor<AST> {
 
     @Override
     public AST visit(Alphabet a) {
-        return null;
+        while(!tokenizer.checkToken("\\}")){
+            String symbol = tokenizer.getNext();
+            ArcList arcList = (ArcList) this.visit(new ArcList());
+            a.alphabetToArcs.put(symbol, arcList);
+        }
+        return a;
     }
 
     @Override
     public AST visit(Arc a) {
-        return null;
+        tokenizer.getAndCheckNext("\\(");
+        a.fromNode = tokenizer.getNext();
+        tokenizer.getAndCheckNext("\\,");
+        a.toNode = tokenizer.getNext();
+        tokenizer.getAndCheckNext("\\)");
+        return a;
     }
 
     @Override
@@ -42,7 +52,7 @@ public class ParseVisitor implements Visitor<AST> {
         fa.nodes = (NodeList) this.visit(new NodeList());
         tokenizer.getAndCheckNext("\\}");
         tokenizer.getAndCheckNext("\\{");
-        fa.a = (Alphabet) this.visit(new Alphabet());
+        fa.alphabet = (Alphabet) this.visit(new Alphabet());
         tokenizer.getAndCheckNext("\\}");
         return fa;
     }
@@ -50,11 +60,28 @@ public class ParseVisitor implements Visitor<AST> {
     @Override
     public AST visit(Node n) {
         String label = tokenizer.getNext();
+
+        if(tokenizer.checkToken("\\(")) {
+            // Handle start or accept
+            tokenizer.getNext();
+            if(tokenizer.checkToken("start")){
+                n.isStart = true;
+                tokenizer.getNext();
+            }else if(tokenizer.checkToken("accept")){
+                n.isAccept = true;
+                tokenizer.getNext();
+            }else{
+                throw new ParseError("Expected start or accept");
+            }
+            tokenizer.getAndCheckNext("\\)");
+        }
+
         if(tokenizer.checkToken("\\,")){
             tokenizer.getNext();
         }
+
         n.label=label;
-        return null;
+        return n;
     }
 
     @Override
@@ -63,7 +90,7 @@ public class ParseVisitor implements Visitor<AST> {
             Node node = (Node) this.visit(new Node());
             nl.nodes.add(node);
         }
-        return null;
+        return nl;
     }
 
     @Override
@@ -74,6 +101,16 @@ public class ParseVisitor implements Visitor<AST> {
 
     @Override
     public AST visit(ArcList al) {
-        return null;
+        tokenizer.getAndCheckNext(":");
+        tokenizer.getAndCheckNext("\\{");
+        while(!tokenizer.checkToken("\\}")) {
+            Arc arc = (Arc) this.visit(new Arc());
+            if(tokenizer.checkToken("\\,")){
+                tokenizer.getNext();
+            }
+            al.arcs.add(arc);
+        }
+        tokenizer.getAndCheckNext("\\}");
+        return al;
     }
 }

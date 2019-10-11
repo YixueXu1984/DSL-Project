@@ -32,15 +32,12 @@ public class Tokenizer {
 
         String tokenizedProgram = program;
         tokenizedProgram = tokenizedProgram.replace("\n","");
-        System.out.println(program);
 
         for (String s : literals){
             tokenizedProgram = tokenizedProgram.replace(s,"_"+s+"_");
-            System.out.println(tokenizedProgram);
         }
 
         tokenizedProgram = tokenizedProgram.replaceAll("[ ]+","");
-        System.out.println(tokenizedProgram);
         tokens= tokenizedProgram.split("[_]+");
 
         System.out.println(Arrays.asList(tokens));
