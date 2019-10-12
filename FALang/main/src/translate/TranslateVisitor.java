@@ -5,6 +5,7 @@ import general.Visitor;
 
 public class TranslateVisitor implements Visitor<String> {
 
+
     private String concat(String ... strs) {
         String output = "";
         for(String str: strs)
@@ -44,7 +45,23 @@ public class TranslateVisitor implements Visitor<String> {
     public String visit(Program p) {
         String imports = "";
         String init = "";
-        return concat(imports, init, p.finiteAutomata.accept(this));
+        String preamble =
+                "\\documentclass[12pt]{article}\n" +
+                "\\usepackage{tikz}\n" +
+                "\\usetikzlibrary{automata, positioning, arrows}\n" +
+                "\n" +
+                "\\begin{document}\n" +
+                "\\begin{tikzpicture}";
+
+        String postamble =
+                "\\end{tikzpicture}\n" +
+                "\\end{document}";
+
+        Translator.writer.println(preamble);
+        p.finiteAutomata.accept(this);
+        Translator.writer.println(postamble);
+
+        return "DONE";
     }
 
     @Override

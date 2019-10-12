@@ -1,0 +1,8 @@
+\documentclass[12pt]{article}
+\usepackage{tikz}
+\usetikzlibrary{automata, positioning, arrows}
+
+\begin{document}
+\begin{tikzpicture}
+\end{tikzpicture}
+\end{document}

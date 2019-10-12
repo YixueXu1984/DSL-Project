@@ -32,6 +32,8 @@ public class Tokenizer {
 
         String tokenizedProgram = program;
         tokenizedProgram = tokenizedProgram.replace("\n","");
+        tokenizedProgram = tokenizedProgram.replace("\r","");
+
 
         for (String s : literals){
             tokenizedProgram = tokenizedProgram.replace(s,"_"+s+"_");
