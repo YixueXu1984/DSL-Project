@@ -20,9 +20,10 @@ public class Interpreter {
 
         List<String> literals = Arrays.asList( "{", "}", "(", ")", ",", ":");
         Tokenizer.makeTokenizer("input.txt", literals);
+        Translator.setWriter("output.txt");
+
         Program program = Parser.parse();
 
-        Translator.setWriter("output.txt");
         String result = Translator.translate(program);
 
         Translator.closeWriter();
