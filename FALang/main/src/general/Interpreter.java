@@ -1,5 +1,7 @@
 package general;
 
+import NameCheck.NameCheckVisitor;
+import NameCheck.NameChecker;
 import ast.Program;
 import parse.Parser;
 import tokenize.Tokenizer;
@@ -19,10 +21,11 @@ public class Interpreter {
 
 
         List<String> literals = Arrays.asList( "{", "}", "(", ")", ",", ":");
-        Tokenizer.makeTokenizer("input.txt", literals);
+        Tokenizer.makeTokenizer("C:\\Users\\yixue\\cpsc410-DSL\\FALang\\input.txt", literals);
         Program program = Parser.parse();
+        NameChecker.check(program);
 
-        Translator.setWriter("output.txt");
+        Translator.setWriter("C:\\Users\\yixue\\cpsc410-DSL\\FALang\\output.txt");
         String result = Translator.translate(program);
 
         Translator.closeWriter();
