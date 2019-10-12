@@ -6,12 +6,10 @@
 \node[state, initial] at (0,0) (q0) {$q0$}; 
 \node[state] at (2,0) (q1) {$q1$}; 
 \node[state, accepting] at (4,0) (q2) {$q2$}; 
-\draw (q0) edge[bend left] node {\tt 0} ( q1); 
-\draw (q2) edge[loop below] node {\tt 0} ( q2); 
-\draw (q1) edge[bend left] node {\tt 0} ( q2); 
-\draw (q0) edge[bend left] node {\tt 1} ( q1); 
-\draw (q2) edge[loop below] node {\tt 1} ( q2); 
+\draw (q2) edge[loop below] node {\tt 0,1} ( q2); 
+\draw (q0) edge[loop below] node {\tt 1,$\epsilon$} ( q0); 
 \draw (q1) edge[loop below] node {\tt 1} ( q1); 
-\draw (q0) edge[loop below] node {\tt $\epsilon$} ( q0); 
+\draw (q0) edge[bend left] node {\tt 0} ( q1); 
+\draw (q1) edge[bend left] node {\tt 0} ( q2); 
 \end{tikzpicture}
 \end{document}

@@ -3,6 +3,10 @@ package translate;
 import ast.*;
 import general.Visitor;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 public class TranslateVisitor implements Visitor<String> {
 
     // Used for node positioning
@@ -12,58 +16,48 @@ public class TranslateVisitor implements Visitor<String> {
     int yMax = 4;
     int spacing = 2;
 
-    // Used for arc label
-    String alphabetSymbol = "";
-
-    private String handleCoordinates(Node n) {
-
-        if(n.isStart){
-            return "(0,0) ";
-        } else {
-
-            int originalY = yPosition;
-
-            if (xPosition >= xMax && yPosition < yMax){
-                // Overflow on right side of page, go up (assuming ymax is not reached)
-                yPosition = yPosition + spacing;
-            }
-
-            if (originalY >= yMax)
-            {
-                // Overflow on top move left
-                xPosition = xPosition - spacing ;
-            } else if(xPosition < xMax){
-                // Keep moving right
-                xPosition = xPosition + spacing ;
-            }
-
-            return ("(" +xPosition + "," + yPosition + ") ");
-        }
-    }
-
     @Override
     public String visit(AST ast) { return null; }
 
     @Override
     public String visit(Alphabet a) {
+
+        // Build mapping of arc to Alphabet
+        Map<Arc, ArrayList<String>> arcsToAlphabet = new HashMap<>();
+
         a.alphabetToArcs.forEach((symbol, arcList) -> {
-            alphabetSymbol = symbol.equals("\\e") ? "$\\epsilon$" : symbol;
-            arcList.accept(this);
+            String alphabetSymbol = symbol.equals("\\e") ? "$\\epsilon$" : symbol;
+
+            arcList.arcs.forEach((arc -> {
+
+                ArrayList<String> alphabets = arcsToAlphabet.get(arc);
+                if(alphabets == null){
+                    alphabets = new ArrayList();
+                }
+                alphabets.add(alphabetSymbol);
+                arcsToAlphabet.put(arc, alphabets);
+            }));
         });
+
+        // Draw edges
+        arcsToAlphabet.forEach((arc, alphabetList) -> {
+
+            String arcDetail = arc.fromNode.equals(arc.toNode) ? "[loop below] " : "[bend left] ";
+
+            String alphabetListFormatted = String.join(",", alphabetList);
+
+            Translator.writer.println("\\draw (" + arc.fromNode + ") " +
+                    "edge" + arcDetail + "node " +
+                    "{\\tt " + alphabetListFormatted + "} " +
+                    "( " + arc.toNode + "); "
+            );
+        });
+
         return null;
     }
 
     @Override
     public String visit(Arc a) {
-
-        String arcDetail = a.fromNode.equals(a.toNode) ? "[loop below] " : "[bend left] ";
-
-        Translator.writer.println("\\draw (" + a.fromNode + ") " +
-                "edge" + arcDetail + "node " +
-                "{\\tt " + alphabetSymbol + "} " +
-                "( " + a.toNode + "); "
-        );
-
         return null;
     }
 
@@ -107,8 +101,6 @@ public class TranslateVisitor implements Visitor<String> {
 
     @Override
     public String visit(Program p) {
-        String imports = "";
-        String init = "";
         String preamble =
                 "\\documentclass[12pt]{article}\n" +
                 "\\usepackage{tikz}\n" +
@@ -133,5 +125,31 @@ public class TranslateVisitor implements Visitor<String> {
             arc.accept(this);
         });
         return null;
+    }
+
+    private String handleCoordinates(Node n) {
+
+        if(n.isStart){
+            return "(0,0) ";
+        } else {
+
+            int originalY = yPosition;
+
+            if (xPosition >= xMax && yPosition < yMax){
+                // Overflow on right side of page, go up (assuming ymax is not reached)
+                yPosition = yPosition + spacing;
+            }
+
+            if (originalY >= yMax)
+            {
+                // Overflow on top move left
+                xPosition = xPosition - spacing ;
+            } else if(xPosition < xMax){
+                // Keep moving right
+                xPosition = xPosition + spacing ;
+            }
+
+            return ("(" +xPosition + "," + yPosition + ") ");
+        }
     }
 }
