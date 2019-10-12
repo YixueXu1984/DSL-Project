@@ -9,7 +9,7 @@ import java.io.UnsupportedEncodingException;
 
 public class Translator {
 
-    static protected PrintWriter writer;
+    public static PrintWriter writer;
     public static void setWriter(String name) throws FileNotFoundException, UnsupportedEncodingException {
         writer = new PrintWriter(name, "UTF-8");
     }
