@@ -12,6 +12,9 @@ public class TranslateVisitor implements Visitor<String> {
     int yMax = 4;
     int spacing = 2;
 
+    // Used for arc label
+    String alphabetSymbol = "";
+
     private String handleCoordinates(Node n) {
 
         if(n.isStart){
@@ -43,11 +46,24 @@ public class TranslateVisitor implements Visitor<String> {
 
     @Override
     public String visit(Alphabet a) {
+        a.alphabetToArcs.forEach((symbol, arcList) -> {
+            alphabetSymbol = symbol.equals("\\e") ? "$\\epsilon$" : symbol;
+            arcList.accept(this);
+        });
         return null;
     }
 
     @Override
     public String visit(Arc a) {
+
+        String arcDetail = a.fromNode.equals(a.toNode) ? "[loop below] " : "[bend left] ";
+
+        Translator.writer.println("\\draw (" + a.fromNode + ") " +
+                "edge" + arcDetail + "node " +
+                "{\\tt " + alphabetSymbol + "} " +
+                "( " + a.toNode + "); "
+        );
+
         return null;
     }
 
@@ -57,6 +73,8 @@ public class TranslateVisitor implements Visitor<String> {
         for(Node node : fa.nodes.nodes) {
             node.accept(this);
         }
+
+        fa.alphabet.accept(this);
 
         return null;
     }
@@ -111,6 +129,9 @@ public class TranslateVisitor implements Visitor<String> {
 
     @Override
     public String visit(ArcList al) {
+        al.arcs.forEach((arc) -> {
+            arc.accept(this);
+        });
         return null;
     }
 }
