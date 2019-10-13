@@ -4,17 +4,14 @@ import ast.*;
 import general.Visitor;
 
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@SuppressWarnings("ALL")
+
 public class NameCheckVisitor<AST> implements Visitor<AST> {
 
-
+    private Set<String> nodeSet = new HashSet<>();
 
 
     @Override
@@ -60,18 +57,28 @@ public class NameCheckVisitor<AST> implements Visitor<AST> {
                     + " Please fix the "+ a.fromNode + " from (" + a.fromNode + ", " + a.toNode + ").");
         }
 
+        if (!nodeSet.contains(a.fromNode)) {
+            throw new Error("An arc must start from a valid state: this arc is from a non-existing state."
+                    + " Please fix the "+ a.fromNode + " from (" + a.fromNode + ", " + a.toNode + ").");
+        }
 
         Matcher mTo = p.matcher(a.toNode);
         boolean c = mTo.find();
         if (c){
-            throw new Error("An arc must start from a valid state: state name contains special characters."
+            throw new Error("An arc must end up in a valid state: state name contains special characters."
                     + " Please fix the "+ a.toNode + " from (" + a.fromNode + ", " + a.toNode + ").");
+        }
+
+        if (!nodeSet.contains(a.toNode)) {
+            throw new Error("An arc must end up in a valid state: this arc is from a non-existing state."
+                    + " Please fix the "+ a.fromNode + " from (" + a.fromNode + ", " + a.toNode + ").");
         }
     return (AST) a;
     }
 
     @Override
     public AST visit(FA fa) {
+        fa.nodes.accept(this);
         Pattern p = Pattern.compile("[^a-z0-9 ]", Pattern.CASE_INSENSITIVE);
         Matcher m = p.matcher(fa.name);
         boolean b = m.find();
@@ -80,7 +87,6 @@ public class NameCheckVisitor<AST> implements Visitor<AST> {
         }
 
         fa.alphabet.accept(this);
-        fa.nodes.accept(this);
 
 
         return (AST) fa;
@@ -93,6 +99,9 @@ public class NameCheckVisitor<AST> implements Visitor<AST> {
 
     @Override
     public AST visit(NodeList nl) {
+        for (Node n : nl.nodes) {
+            nodeSet.add(n.label);
+        }
         return (AST) nl;
     }
 
