@@ -21,11 +21,11 @@ public class Interpreter {
 
 
         List<String> literals = Arrays.asList( "{", "}", "(", ")", ",", ":");
-        Tokenizer.makeTokenizer("C:\\Users\\yixue\\cpsc410-DSL\\FALang\\input.txt", literals);
+        Tokenizer.makeTokenizer("input.txt", literals);
+        Translator.setWriter("output.txt");
         Program program = Parser.parse();
         NameChecker.check(program);
 
-        Translator.setWriter("C:\\Users\\yixue\\cpsc410-DSL\\FALang\\output.txt");
         String result = Translator.translate(program);
 
         Translator.closeWriter();

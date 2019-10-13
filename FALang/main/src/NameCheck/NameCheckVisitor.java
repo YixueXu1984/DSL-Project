@@ -12,6 +12,7 @@ import java.util.regex.Pattern;
 public class NameCheckVisitor<AST> implements Visitor<AST> {
 
     private Set<String> nodeSet = new HashSet<>();
+    String currentAlphabet; // Used to print arc error message
 
 
     @Override
@@ -31,8 +32,10 @@ public class NameCheckVisitor<AST> implements Visitor<AST> {
             }
 
             if (b) {
-                throw new Error("Wrong alphabet type: expect a letter or a number");
+                throw new NameCheckError("Wrong alphabet type: expect a letter or a number");
             }
+
+            currentAlphabet = charE;
 
             Set<Arc> arcList = a.alphabetToArcs.get(charE).arcs;
             Arc[] arcs = arcList.toArray(new Arc[0]);
@@ -40,9 +43,6 @@ public class NameCheckVisitor<AST> implements Visitor<AST> {
                 arcs[i].accept(this);
             }
         }
-
-
-
 
         return (AST) a;
     }
@@ -53,25 +53,25 @@ public class NameCheckVisitor<AST> implements Visitor<AST> {
         Matcher mFrom = p.matcher(a.fromNode);
         boolean b = mFrom.find();
         if (b){
-            throw new Error("An arc must start from a valid state: state name contains special characters."
-                    + " Please fix the "+ a.fromNode + " from (" + a.fromNode + ", " + a.toNode + ").");
+            throw new NameCheckError("State name contains special characters."
+                    + " Please fix the arc for "+ currentAlphabet + " from (" + a.fromNode + ", " + a.toNode + ").");
         }
 
         if (!nodeSet.contains(a.fromNode)) {
-            throw new Error("An arc must start from a valid state: this arc is from a non-existing state."
-                    + " Please fix the "+ a.fromNode + " from (" + a.fromNode + ", " + a.toNode + ").");
+            throw new NameCheckError("An arc references a non-existing state."
+                    + " Please fix the arc for "+ currentAlphabet + " from (" + a.fromNode + ", " + a.toNode + ").");
         }
 
         Matcher mTo = p.matcher(a.toNode);
         boolean c = mTo.find();
         if (c){
-            throw new Error("An arc must end up in a valid state: state name contains special characters."
-                    + " Please fix the "+ a.toNode + " from (" + a.fromNode + ", " + a.toNode + ").");
+            throw new NameCheckError("State name contains special characters."
+                    + " Please fix the arc for "+ currentAlphabet + " from (" + a.fromNode + ", " + a.toNode + ").");
         }
 
         if (!nodeSet.contains(a.toNode)) {
-            throw new Error("An arc must end up in a valid state: this arc is from a non-existing state."
-                    + " Please fix the "+ a.fromNode + " from (" + a.fromNode + ", " + a.toNode + ").");
+            throw new NameCheckError("An arc references a non-existing state."
+                    + " Please fix the arc for "+ currentAlphabet + " from (" + a.fromNode + ", " + a.toNode + ").");
         }
     return (AST) a;
     }
@@ -83,7 +83,7 @@ public class NameCheckVisitor<AST> implements Visitor<AST> {
         Matcher m = p.matcher(fa.name);
         boolean b = m.find();
         if (b){
-            throw new Error("State Machine name contains special character");
+            throw new NameCheckError("State Machine name contains special character");
         }
 
         fa.alphabet.accept(this);

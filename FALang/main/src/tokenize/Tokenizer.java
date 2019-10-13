@@ -42,7 +42,7 @@ public class Tokenizer {
         tokenizedProgram = tokenizedProgram.replaceAll("[ ]+","");
         tokens= tokenizedProgram.split("[_]+");
 
-        System.out.println(Arrays.asList(tokens));
+//        System.out.println(Arrays.asList(tokens));
     }
 
 
